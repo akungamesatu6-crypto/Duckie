@@ -2,7 +2,7 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 const manifest = require("../../deck/manifest.json");
 
-const BASE_URI = "https://duckie.vercel.app/metadata/";
+const BASE_URI = "https://duckie-steel.vercel.app/metadata/";
 const DECK_HASH = manifest.deckHash;
 const BITMAP = manifest.rarityBitmap;
 const RARITY_NAMES = ["Common", "Rare", "Epic", "Legendary"];
