@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
 <link rel="icon" href="data:," />
-<title>Duckie — Preview</title>
+<title>Duckie — Mint Live</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&display=swap" rel="stylesheet">
@@ -95,7 +95,7 @@ nav.main{display:none}
 @media(min-width:1020px){nav.main a{font-size:.92rem;padding:10px 10px}}
 @media(max-width:899px){
   .wrap{padding:0 14px}
-  .preview-banner .wrap{font-size:.86rem}
+  .live-banner .wrap{font-size:.86rem}
   .hero-img img{height:62vw;min-height:210px}
   .hero-body{padding:18px 16px 20px}
   .hero-body h1{font-size:1.92rem;line-height:1.05}
@@ -112,11 +112,11 @@ nav.main{display:none}
   .burger{width:40px;height:40px;min-width:40px;min-height:40px}
 }
 
-/* Preview banner */
-.preview-banner{background:var(--ocean-deep);color:#EAF7F8}
-@media (prefers-color-scheme: dark){.preview-banner{background:#0E3D52;color:#D9F2F3}}
-.preview-banner .wrap{display:flex;gap:10px;align-items:flex-start;padding-top:10px;padding-bottom:10px;font-size:.92rem}
-.preview-banner strong{white-space:nowrap}
+/* Live banner */
+.live-banner{background:var(--ocean-deep);color:#EAF7F8}
+@media (prefers-color-scheme: dark){.live-banner{background:#0E3D52;color:#D9F2F3}}
+.live-banner .wrap{display:flex;gap:10px;align-items:flex-start;padding-top:10px;padding-bottom:10px;font-size:.92rem}
+.live-banner strong{white-space:nowrap}
 .dot{width:9px;height:9px;border-radius:50%;background:#4CC47A;flex:none;margin-top:7px;animation:livePulse 1.8s ease-in-out infinite}
 
 /* Hero */
@@ -442,7 +442,7 @@ img,svg,video{max-width:100%}
   </div>
 </header>
 
-<div class="preview-banner" role="note">
+<div class="live-banner" role="note">
   <div class="wrap"><span class="dot" aria-hidden="true"></span><p style="margin:0" data-i18n="banner"><strong>MINT LIVE —</strong> Minting is <strong>open now</strong>. Duckie is live on BNB Chain. Your first mint is FREE, then 0.0002–0.0008 BNB on the ladder, max 30 per wallet.</p></div>
 </div>
 
@@ -500,7 +500,7 @@ img,svg,video{max-width:100%}
           <span class="pond-duck" aria-hidden="true">&#129414;</span>
         </div>
         <div class="live-info">
-          <span class="live-badge"><span class="live-dot" aria-hidden="true"></span><span data-i18n="live.live">Preview</span></span>
+          <span class="live-badge"><span class="live-dot" aria-hidden="true"></span><span data-i18n="live.live">Live</span></span>
           <p class="live-count"><strong id="liveMinted">0</strong> <span data-i18n="live.of">/ 4,444 minted</span></p>
           <div class="live-bar" id="liveBarWrap" role="progressbar" aria-label="Mint progress" aria-valuemin="0" aria-valuemax="4444" aria-valuenow="0"><div class="live-bar-fill" id="liveBarFill"></div></div>
           <p class="live-meta"><strong id="livePct">0%</strong> · <span data-i18n="live.graynote">grey while nothing is minted — full colour at sold out.</span></p>
@@ -788,7 +788,7 @@ img,svg,video{max-width:100%}
 (function(){
 var DICT = {
 en: {
-"title": `Duckie — Preview`,
+"title": `Duckie — Mint Live`,
 "nav.designs": `Designs`, "nav.how": `How it works`, "nav.rarity": `Rarity`, "nav.contracts": `Contracts`, "nav.marketplace": `Marketplace`, "nav.status": `Status`, "nav.mint": `Mint`,
 "menu.mintTag": `Live now →`, "menu.howTag": `Agent mint →`, "menu.designsTag": `11 designs →`, "menu.rarityTag": `4 tiers →`, "menu.duckTag": `Claims →`, "menu.marketTag": `Trade →`, "menu.share": `Post X`, "menu.shareTag": `Share →`, "menu.faqTag": `Status →`, "menu.open": `Open menu`, "menu.close": `Close menu`,
 "banner": `<strong>MINT LIVE —</strong> Minting is <strong>open now</strong>. Duckie is live on BNB Chain. Your first mint is FREE, then 0.0002–0.0008 BNB on the ladder, max 30 per wallet.`,
@@ -798,7 +798,7 @@ en: {
 "hero.cta1": `Mint now`, "hero.cta2": `Browse the 11 designs`,
 "fact.supply": `Total supply`, "fact.maxWallet": `Max per wallet`, "fact.mints": `mints`, "fact.maxCost": `Max wallet cost`, "fact.royalty": `Royalty`,
 "live.h2": `Live Status`, "live.p": `Watch the pond bloom. Every 10% minted, another lily pad opens — when all 4,444 are minted, the whole pond is in flower.`,
-"live.live": `Preview`, "live.of": `/ 4,444 minted`, "live.graynote": `one lily pad blooms per 10% minted.`,
+"live.live": `Live`, "live.of": `/ 4,444 minted`, "live.graynote": `one lily pad blooms per 10% minted.`,
 "live.note": `Minted count read live from the Duckie contract on BNB Chain · refreshes every 30 seconds.`,
 "live.stockH": `Remaining stock by rarity`, "live.leftLine": `{r} left`, "live.tierLine": `{m} minted · of {t} total`,
 "gal.h2": `The 11 designs`, "gal.p": `Five Pondling colourways, two Lily, two Sunset, and two Celestial. Swipe through all 11 — you don't pick your duck, the deck does. Each design's edition count is fixed in the deck before launch.`,
@@ -861,7 +861,7 @@ en: {
 "footer.chain": `Chain: BNB Smart Chain (56) · Standard: BEP-721 · Royalty: 5%`
 },
 zh: {
-"title": `Duckie — 预览`,
+"title": `Duckie — 铸造进行中`,
 "nav.designs": `设计`, "nav.how": `铸造方式`, "nav.rarity": `稀有度`, "nav.contracts": `合约`, "nav.marketplace": `交易市场`, "nav.status": `状态`, "nav.mint": `铸造`,
 "menu.mintTag": `已开启 →`, "menu.howTag": `智能体铸造 →`, "menu.designsTag": `11 款设计 →`, "menu.rarityTag": `4 个等级 →`, "menu.duckTag": `领取 →`, "menu.marketTag": `交易 →`, "menu.share": `X 帖子`, "menu.shareTag": `分享 →`, "menu.faqTag": `状态 →`, "menu.open": `打开菜单`, "menu.close": `关闭菜单`,
 "banner": `<strong>铸造进行中 —</strong> 铸造<strong>现已开启</strong>。Duckie 已在 BNB Chain 上线。首次铸造免费，之后按阶梯 0.0002–0.0008 BNB，每个钱包最多 30 次。`,
@@ -871,7 +871,7 @@ zh: {
 "hero.cta1": `立即铸造`, "hero.cta2": `浏览 11 款设计`,
 "fact.supply": `总供应量`, "fact.maxWallet": `每钱包上限`, "fact.mints": `次铸造`, "fact.maxCost": `每钱包最高成本`, "fact.royalty": `版税`,
 "live.h2": `实时状态`, "live.p": `看着池塘开花。每铸造 10%，就有一片睡莲绽放——4,444 只全部铸造完毕时，整个池塘盛开。`,
-"live.live": `预览`, "live.of": `/ 4,444 已铸造`, "live.graynote": `每铸造 10%，绽放一片睡莲。`,
+"live.live": `进行中`, "live.of": `/ 4,444 已铸造`, "live.graynote": `每铸造 10%，绽放一片睡莲。`,
 "live.note": `已铸造数量从 BNB Chain 上的 Duckie 合约实时读取 · 每 30 秒刷新。`,
 "live.stockH": `各稀有度剩余库存`, "live.leftLine": `剩余 {r}`, "live.tierLine": `已铸造 {m} · 共 {t}`,
 "gal.h2": `11 款设计`, "gal.p": `五款池塘鸭配色、两款睡莲、两款晚霞、两款天翔。你的鸭子不是你挑的——由牌组决定。每款设计的版数在上线前就已固定在牌组中。`,
@@ -934,7 +934,7 @@ zh: {
 "footer.chain": `链：BNB Smart Chain (56) · 标准：BEP-721 · 版税：5%`
 },
 ja: {
-"title": `Duckie — プレビュー`,
+"title": `Duckie — ミント受付中`,
 "nav.designs": `デザイン`, "nav.how": `ミント方法`, "nav.rarity": `レアリティ`, "nav.contracts": `コントラクト`, "nav.marketplace": `マーケットプレイス`, "nav.status": `ステータス`, "nav.mint": `ミント`,
 "menu.mintTag": `開始しました →`, "menu.howTag": `エージェントミント →`, "menu.designsTag": `11 デザイン →`, "menu.rarityTag": `4 ティア →`, "menu.duckTag": `請求 →`, "menu.marketTag": `取引 →`, "menu.share": `X 投稿`, "menu.shareTag": `シェア →`, "menu.faqTag": `ステータス →`, "menu.open": `メニューを開く`, "menu.close": `メニューを閉じる`,
 "banner": `<strong>ミント受付中 —</strong> ミントは<strong>開始しました</strong>。Duckie は BNB Chain でライブです。初回ミント無料、その後 0.0002–0.0008 BNB の段階価格、1 ウォレット最大 30 個。`,
@@ -944,7 +944,7 @@ ja: {
 "hero.cta1": `今すぐミント`, "hero.cta2": `11 デザインを見る`,
 "fact.supply": `総供給量`, "fact.maxWallet": `ウォレット上限`, "fact.mints": `回ミント`, "fact.maxCost": `ウォレット最大コスト`, "fact.royalty": `ロイヤルティ`,
 "live.h2": `ライブステータス`, "live.p": `池に花が咲くのを見守りましょう。ミントが 10% 進むごとにスイレンの葉が 1 枚咲き、4,444 羽がすべてミントされると池全体が満開になります。`,
-"live.live": `プレビュー`, "live.of": `/ 4,444 ミント済み`, "live.graynote": `ミントが 10% 進むごとに、スイレンの葉が 1 枚咲きます。`,
+"live.live": `ライブ`, "live.of": `/ 4,444 ミント済み`, "live.graynote": `ミントが 10% 進むごとに、スイレンの葉が 1 枚咲きます。`,
 "live.note": `ミント数は BNB Chain 上の Duckie コントラクトからライブ取得 · 30 秒ごとに更新。`,
 "live.stockH": `レアリティ別の残り在庫`, "live.leftLine": `残り {r}`, "live.tierLine": `{m} ミント済み · 全 {t}`,
 "gal.h2": `11 のデザイン`, "gal.p": `池のアヒル 5 色、スイレン 2 種、夕映え 2 種、天翔 2 種。あなたのアヒルは自分で選べません——デッキが決めます。各デザインの版数はローンチ前にデッキへ固定されています。`,
