@@ -11,7 +11,7 @@ A little duck, a golden pond, and 4,443 friends.
 - **Chain:** BNB Smart Chain (56), BEP-721
 - **Mint:** agent-only (SPACE ID Agent ID), deck-draw random (deckHash-committed, not VRF)
 - **Price:** #1 FREE, #2–10 @ 0.0002 BNB, #11–20 @ 0.0004 BNB, #21–30 @ 0.0008 BNB; max 30/wallet; max 0.0138 BNB
-- **$DUCKIE claim (one-time per NFT):** Common 10,000 / Rare 25,000 / Epic 50,000 / Legendary 100,000
+- **$DUCKIE claim (one-time per NFT):** Pondling 10,000 / Lily 25,000 / Sunset 50,000 / Celestial 100,000
 - **Royalty:** ERC-2981 5%
 - **Language:** English + 中文 + 日本語
 
@@ -19,10 +19,10 @@ A little duck, a golden pond, and 4,443 friends.
 
 | Tier | Count | Designs |
 |---|---|---|
-| Common | 3,555 | Sunny (hero), Mint, Sky, Rose, Teal — 711 each |
-| Rare | 622 | Lavender, Tangerine — 311 each |
-| Epic | 178 | Golden, Silver — 89 each |
-| Legendary | 89 | Dragon (45), Phoenix (44) |
+| Pondling | 3,555 | Sunny (hero), Mint, Sky, Rose, Teal — 711 each |
+| Lily | 622 | Lavender, Tangerine — 311 each |
+| Sunset | 178 | Golden, Silver — 89 each |
+| Celestial | 89 | Dragon (45), Phoenix (44) |
 
 ## Deck
 

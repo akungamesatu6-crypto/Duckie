@@ -1,7 +1,7 @@
 // Generate the Duckie deck (THYRK-style, hash-only design).
 //
-// Deck = 4,444 mintable tokens (Common 3,555 / Rare 622 /
-// Epic 178 / Legendary 89). ALL 4,444 are in the deck —
+// Deck = 4,444 mintable tokens (Pondling 3,555 / Lily 622 /
+// Sunset 178 / Celestial 89). ALL 4,444 are in the deck —
 // there is no redeem-only token (unlike AgentRune's Prime).
 //
 // Method (mirrors AgentRune / THYRK's documented design):
@@ -19,13 +19,13 @@
 // this script and verify they match the on-chain commitment.
 //
 // Design indices (global, 0-10) — from BRIEF.md:
-//   Common    (0): 0 Blue, 1 Green, 2 Yellow, 3 Pink, 4 Teal
-//   Rare      (1): 5 Purple, 6 Orange
-//   Epic      (2): 7 Golden, 8 Silver
-//   Legendary (3): 9 Dragon, 10 Phoenix
-// Per-design editions: Common 711 each (5 x 711 = 3,555);
-// Rare 311 each (2 x 311 = 622); Epic 89 each (2 x 89 = 178);
-// Legendary Dragon 45 + Phoenix 44 = 89.
+//   Pondling  (0): 0 Blue, 1 Green, 2 Yellow, 3 Pink, 4 Teal
+//   Lily      (1): 5 Purple, 6 Orange
+//   Sunset    (2): 7 Golden, 8 Silver
+//   Celestial (3): 9 Dragon, 10 Phoenix
+// Per-design editions: Pondling 711 each (5 x 711 = 3,555);
+// Lily 311 each (2 x 311 = 622); Sunset 89 each (2 x 89 = 178);
+// Celestial Dragon 45 + Phoenix 44 = 89.
 
 const fs = require("fs");
 const path = require("path");
@@ -35,7 +35,7 @@ const SEED_ASCII = "DUCKIE";
 const SEED = ethers.toUtf8Bytes(SEED_ASCII);
 
 const RARITY = { COMMON: 0, RARE: 1, EPIC: 2, LEGENDARY: 3 };
-const RARITY_NAMES = ["Common", "Rare", "Epic", "Legendary"];
+const RARITY_NAMES = ["Pondling", "Lily", "Sunset", "Celestial"];
 
 // design: { name, file, rarity, editions }
 const DESIGNS = [
