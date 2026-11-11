@@ -13,7 +13,7 @@ const BASE_URI = "https://duckie-steel.vercel.app/metadata/";
 const OWNER = "0x36F3D56eAD5D1D6C2434F94DeFcEF732C5C3CbD2"; // BAW (owner + revenue)
 const PROXY = "0x4e59b44847b379578588920cA78FbF26c0B4956C"; // deterministic deployment proxy
 const AGENT_ID = "0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F"; // SPACE ID Agent ID registry
-const DECK_HASH = "0xd327dc9e860fd0a641be0a1011ef1e568ca5050d0f57d4c89e9669ee03e7e2cd";
+const DECK_HASH = "0xfd9fcf8abdbb057dd92f7362ed4581108fdc914930db23e95f02fa2cd0962140"; // = keccak256(deck encoding), recomputed from deck/manifest.json 2026-11-11
 
 function predict(artifact, types, values) {
   const args = ethers.AbiCoder.defaultAbiCoder().encode(types, values);

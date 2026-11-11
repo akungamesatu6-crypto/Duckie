@@ -5,7 +5,7 @@ const manifest = require("../../deck/manifest.json");
 const BASE_URI = "https://duckie-steel.vercel.app/metadata/";
 const DECK_HASH = manifest.deckHash;
 const BITMAP = manifest.rarityBitmap;
-const RARITY_NAMES = ["Common", "Rare", "Epic", "Legendary"];
+const RARITY_NAMES = ["Pondling", "Lily", "Sunset", "Celestial"]; // renamed v2 2026-11-11 (was Common/Rare/Epic/Legendary)
 const CLAIM_AMOUNTS = ["10000", "25000", "50000", "100000"]; // by rarity 0..3
 
 describe("Duckie (ZigZoo ladder + deck-draw + $DUCKIE rarity claim)", function () {
