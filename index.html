@@ -151,9 +151,9 @@ section{padding:34px 0 6px}
 .filters{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 16px}
 .filter-btn{border:1.5px solid var(--line);background:var(--surface);color:var(--ink2);font-family:inherit;font-weight:800;font-size:.9rem;padding:9px 16px;border-radius:999px;cursor:pointer;min-height:44px}
 .filter-btn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-@media(min-width:700px){.gallery{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:1000px){.gallery{grid-template-columns:repeat(4,1fr)}}
+.gallery{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:6px 2px 14px;scrollbar-width:thin}
+.gallery .card{flex:0 0 min(76vw,300px);scroll-snap-align:start}
+@media(min-width:700px){.gallery .card{flex-basis:320px}}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:0 4px 14px rgba(16,46,61,.06)}
 .card img{aspect-ratio:1/1;object-fit:cover;width:100%}
 .card-body{padding:12px 14px 14px}
@@ -279,7 +279,6 @@ img,svg,video{max-width:100%}
   .dock .btn{padding:11px 16px;white-space:nowrap}
 }
 @media(max-width:420px){
-  .gallery{grid-template-columns:repeat(2,minmax(0,1fr))}
   .facts{grid-template-columns:repeat(2,minmax(0,1fr))}
   .fact dd{font-size:1.08rem}
   .tier-picker{grid-template-columns:1fr}
@@ -289,11 +288,20 @@ img,svg,video{max-width:100%}
   .table-scroll td.num,.table-scroll th.num{white-space:normal;text-align:right}
   .tier-name i{margin-right:4px}
 }
-/* Live Status — duck fills with colour as mints grow */
+/* Live Status — the pond blooms: one lily pad opens per 10% minted */
 .live-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);margin-top:18px;padding:16px;display:grid;gap:16px;overflow:hidden}
-.live-duck{border-radius:16px;overflow:hidden;background:var(--surface2);line-height:0}
-.live-duck img{width:100%;height:100%;max-height:300px;object-fit:cover;object-position:center 30%;filter:grayscale(1) saturate(.25);transition:filter 1.2s ease;animation:duckSway 5.5s ease-in-out infinite;transform-origin:50% 80%}
-@keyframes duckSway{0%,100%{transform:rotate(-1.4deg) translateY(0)}50%{transform:rotate(1.4deg) translateY(-5px)}}
+.pond{position:relative;border-radius:16px;overflow:hidden;height:210px;background:linear-gradient(180deg,#0E7C6B 0%,#0B4F45 55%,#083B34 100%)}
+@media (prefers-color-scheme: dark){.pond{background:linear-gradient(180deg,#0A5A4E 0%,#073B33 55%,#052B26 100%)}}
+.pond::before,.pond::after{content:"";position:absolute;border:1.5px solid rgba(255,255,255,.28);border-radius:50%;animation:ripple 4.5s ease-out infinite}
+.pond::before{width:90px;height:26px;left:12%;top:62%}
+.pond::after{width:120px;height:34px;right:10%;top:30%;animation-delay:2.2s}
+@keyframes ripple{0%{transform:scale(.7);opacity:.7}100%{transform:scale(1.5);opacity:0}}
+.pad{position:absolute;border-radius:50% 50% 50% 50%/58% 58% 42% 42%;background:#5B7A6E;opacity:.75;transition:background .8s ease,opacity .8s ease,transform .8s ease;transform:scale(.92)}
+.pad::after{content:"";position:absolute;left:50%;top:50%;width:0;height:0;border-radius:50%;background:#F6D48A;transform:translate(-50%,-50%);transition:width .6s ease,height .6s ease}
+.pad.bloom{background:#2E9E5B;opacity:1;transform:scale(1)}
+.pad.bloom::after{width:14px;height:14px;background:#F2A8C4;box-shadow:0 0 0 4px rgba(242,168,196,.35)}
+.pond-duck{position:absolute;left:44%;top:38%;font-size:44px;line-height:1;animation:duckBob 3.2s ease-in-out infinite;filter:drop-shadow(0 4px 6px rgba(0,0,0,.35))}
+@keyframes duckBob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-7px) rotate(3deg)}}
 .live-info{min-width:0;display:flex;flex-direction:column;gap:10px;justify-content:center}
 .live-badge{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;background:#DFF5E4;color:#14632F;font-weight:800;font-size:.85rem;padding:7px 12px;border-radius:999px}
 @media (prefers-color-scheme: dark){.live-badge{background:#143D22;color:#7FE3A0}}
@@ -314,7 +322,7 @@ img,svg,video{max-width:100%}
 .lt-meta{margin:7px 0 0;font-size:.86rem;color:var(--muted);font-weight:700}
 @media(min-width:640px){.live-tiers{grid-template-columns:1fr 1fr}}
 @media(min-width:760px){.live-card{grid-template-columns:1fr 1fr;padding:20px;align-items:stretch}}
-@media (prefers-reduced-motion: reduce){.live-duck img,.live-dot{animation:none}}
+@media (prefers-reduced-motion: reduce){.pond::before,.pond::after,.pond-duck,.live-dot{animation:none}}
 
 /* Draft X post card — mobile-first, pond theme */
 .xpost-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--shadow);margin-top:18px;max-width:600px}
@@ -478,7 +486,19 @@ img,svg,video{max-width:100%}
         <p data-i18n="live.p">Watch the duck come to life. It starts out grey — and the more of the 4,444 that get minted, the more colour it gains, until it shines in full colour at sold out.</p>
       </div>
       <div class="live-card">
-        <div class="live-duck"><img id="liveDuckImg" src="assets/hero-sunny.png" alt="Duckie hero duck — grey while minting is empty, filling with colour as mints grow" style="filter:grayscale(1) saturate(.25)"></div>
+        <div class="pond" id="pond" role="img" aria-label="A pond with lily pads that bloom as Duckie mints grow">
+          <span class="pad" style="left:6%;top:14%;width:58px;height:40px"></span>
+          <span class="pad" style="left:26%;top:7%;width:46px;height:32px"></span>
+          <span class="pad" style="left:48%;top:15%;width:66px;height:46px"></span>
+          <span class="pad" style="left:70%;top:9%;width:50px;height:35px"></span>
+          <span class="pad" style="left:86%;top:22%;width:60px;height:42px"></span>
+          <span class="pad" style="left:12%;top:60%;width:62px;height:43px"></span>
+          <span class="pad" style="left:36%;top:54%;width:48px;height:34px"></span>
+          <span class="pad" style="left:58%;top:64%;width:64px;height:45px"></span>
+          <span class="pad" style="left:78%;top:58%;width:46px;height:32px"></span>
+          <span class="pad" style="left:88%;top:72%;width:40px;height:28px"></span>
+          <span class="pond-duck" aria-hidden="true">&#129414;</span>
+        </div>
         <div class="live-info">
           <span class="live-badge"><span class="live-dot" aria-hidden="true"></span><span data-i18n="live.live">Preview</span></span>
           <p class="live-count"><strong id="liveMinted">0</strong> <span data-i18n="live.of">/ 4,444 minted</span></p>
@@ -490,22 +510,22 @@ img,svg,video{max-width:100%}
       <h3 class="live-stock-h" data-i18n="live.stockH">Remaining stock by rarity</h3>
       <div class="live-tiers">
         <div class="live-tier">
-          <div class="lt-head"><span class="tier-name"><i style="background:var(--common)"></i><span data-i18n="tier.common">Common</span></span><span class="lt-left" id="ltLeft0">3,555 left</span></div>
+          <div class="lt-head"><span class="tier-name"><i style="background:var(--common)"></i><span data-i18n="tier.pondling">Pondling</span></span><span class="lt-left" id="ltLeft0">3,555 left</span></div>
           <div class="live-bar lt-bar"><div class="live-bar-fill" id="ltFill0" style="width:100%;background:var(--common)"></div></div>
           <p class="lt-meta" id="ltLine0">0 minted · of 3,555 total</p>
         </div>
         <div class="live-tier">
-          <div class="lt-head"><span class="tier-name"><i style="background:var(--rare)"></i><span data-i18n="tier.rare">Rare</span></span><span class="lt-left" id="ltLeft1">622 left</span></div>
+          <div class="lt-head"><span class="tier-name"><i style="background:var(--rare)"></i><span data-i18n="tier.lily">Lily</span></span><span class="lt-left" id="ltLeft1">622 left</span></div>
           <div class="live-bar lt-bar"><div class="live-bar-fill" id="ltFill1" style="width:100%;background:var(--rare)"></div></div>
           <p class="lt-meta" id="ltLine1">0 minted · of 622 total</p>
         </div>
         <div class="live-tier">
-          <div class="lt-head"><span class="tier-name"><i style="background:var(--epic)"></i><span data-i18n="tier.epic">Epic</span></span><span class="lt-left" id="ltLeft2">178 left</span></div>
+          <div class="lt-head"><span class="tier-name"><i style="background:var(--epic)"></i><span data-i18n="tier.sunset">Sunset</span></span><span class="lt-left" id="ltLeft2">178 left</span></div>
           <div class="live-bar lt-bar"><div class="live-bar-fill" id="ltFill2" style="width:100%;background:var(--epic)"></div></div>
           <p class="lt-meta" id="ltLine2">0 minted · of 178 total</p>
         </div>
         <div class="live-tier">
-          <div class="lt-head"><span class="tier-name"><i style="background:var(--legendary)"></i><span data-i18n="tier.legendary">Legendary</span></span><span class="lt-left" id="ltLeft3">89 left</span></div>
+          <div class="lt-head"><span class="tier-name"><i style="background:var(--legendary)"></i><span data-i18n="tier.celestial">Celestial</span></span><span class="lt-left" id="ltLeft3">89 left</span></div>
           <div class="live-bar lt-bar"><div class="live-bar-fill" id="ltFill3" style="width:100%;background:var(--legendary)"></div></div>
           <p class="lt-meta" id="ltLine3">0 minted · of 89 total</p>
         </div>
@@ -518,29 +538,29 @@ img,svg,video{max-width:100%}
     <div class="wrap">
       <div class="sec-head">
         <h2 data-i18n="gal.h2">The 11 designs</h2>
-        <p data-i18n="gal.p">Five Common colourways, two Rare, two Epic, and two Legendary. You don't pick your duck — the deck does. Each design's edition count is fixed in the deck before launch.</p>
+        <p data-i18n="gal.p">Five Pondling colourways, two Lily, two Sunset, and two Celestial. You don't pick your duck — the deck does. Each design's edition count is fixed in the deck before launch.</p>
       </div>
       <div class="filters" role="group" aria-label="Filter gallery by rarity">
         <button class="filter-btn" data-filter="all" aria-pressed="true" data-i18n="filter.all">All 11</button>
-        <button class="filter-btn" data-filter="common" aria-pressed="false" data-i18n="tier.common">Common</button>
-        <button class="filter-btn" data-filter="rare" aria-pressed="false" data-i18n="tier.rare">Rare</button>
-        <button class="filter-btn" data-filter="epic" aria-pressed="false" data-i18n="tier.epic">Epic</button>
-        <button class="filter-btn" data-filter="legendary" aria-pressed="false" data-i18n="tier.legendary">Legendary</button>
+        <button class="filter-btn" data-filter="common" aria-pressed="false" data-i18n="tier.pondling">Pondling</button>
+        <button class="filter-btn" data-filter="rare" aria-pressed="false" data-i18n="tier.lily">Lily</button>
+        <button class="filter-btn" data-filter="epic" aria-pressed="false" data-i18n="tier.sunset">Sunset</button>
+        <button class="filter-btn" data-filter="legendary" aria-pressed="false" data-i18n="tier.celestial">Celestial</button>
       </div>
       <div class="gallery" id="galleryGrid">
-        <article class="card" data-rarity="common"><img src="assets/hero-sunny.png" alt="Blue duck — the hero design" loading="lazy"><div class="card-body"><h3 data-i18n="d.sunny">Sunny — Hero</h3><div class="card-meta"><span class="pill pill-common" data-i18n="tier.common">Common</span><span data-i18n="ed.711">711 editions</span></div></div></article>
-        <article class="card" data-rarity="common"><img src="assets/tier-common-mint.webp" alt="Green duck on the pond" loading="lazy"><div class="card-body"><h3 data-i18n="d.mint">Mint</h3><div class="card-meta"><span class="pill pill-common" data-i18n="tier.common">Common</span><span data-i18n="ed.711">711 editions</span></div></div></article>
-        <article class="card" data-rarity="common"><img src="assets/tier-common-sky.webp" alt="Yellow duck on the pond" loading="lazy"><div class="card-body"><h3 data-i18n="d.sky">Sky</h3><div class="card-meta"><span class="pill pill-common" data-i18n="tier.common">Common</span><span data-i18n="ed.711">711 editions</span></div></div></article>
-        <article class="card" data-rarity="common"><img src="assets/tier-common-rose.webp" alt="Pink duck on the pond" loading="lazy"><div class="card-body"><h3 data-i18n="d.rose">Rose</h3><div class="card-meta"><span class="pill pill-common" data-i18n="tier.common">Common</span><span data-i18n="ed.711">711 editions</span></div></div></article>
-        <article class="card" data-rarity="common"><img src="assets/tier-common-teal.webp" alt="Teal duck on the pond" loading="lazy"><div class="card-body"><h3 data-i18n="d.teal">Teal</h3><div class="card-meta"><span class="pill pill-common" data-i18n="tier.common">Common</span><span data-i18n="ed.711">711 editions</span></div></div></article>
-        <article class="card" data-rarity="rare"><img src="assets/tier-rare-lavender.webp" alt="Purple duck with flower crown and sunglasses" loading="lazy"><div class="card-body"><h3 data-i18n="d.lavender">Lavender</h3><div class="card-meta"><span class="pill pill-rare" data-i18n="tier.rare">Rare</span><span data-i18n="ed.311">311 editions</span></div></div></article>
-        <article class="card" data-rarity="rare"><img src="assets/tier-rare-tangerine.webp" alt="Orange duck with lily pad and straw hat" loading="lazy"><div class="card-body"><h3 data-i18n="d.tangerine">Tangerine</h3><div class="card-meta"><span class="pill pill-rare" data-i18n="tier.rare">Rare</span><span data-i18n="ed.311">311 editions</span></div></div></article>
-        <article class="card" data-rarity="epic"><img src="assets/tier-epic-golden.webp" alt="Golden duck with crown and golden lei" loading="lazy"><div class="card-body"><h3 data-i18n="d.golden">Golden</h3><div class="card-meta"><span class="pill pill-epic" data-i18n="tier.epic">Epic</span><span data-i18n="ed.89">89 editions</span></div></div></article>
-        <article class="card" data-rarity="epic"><img src="assets/tier-epic-silver.webp" alt="Silver duck with crystal scales and pendant" loading="eager"><div class="card-body"><h3 data-i18n="d.silver">Silver</h3><div class="card-meta"><span class="pill pill-epic" data-i18n="tier.epic">Epic</span><span data-i18n="ed.89">89 editions</span></div></div></article>
-        <article class="card" data-rarity="legendary"><img src="assets/tier-legendary-dragon.webp" alt="Golden dragon-duck" loading="eager"><div class="card-body"><h3 data-i18n="d.dragon">Dragon</h3><div class="card-meta"><span class="pill pill-legendary" data-i18n="tier.legendary">Legendary</span><span data-i18n="ed.45">45 editions</span></div></div></article>
-        <article class="card" data-rarity="legendary"><img src="assets/tier-legendary-phoenix.webp" alt="Phoenix-duck with fiery plumage" loading="eager"><div class="card-body"><h3 data-i18n="d.phoenix">Phoenix</h3><div class="card-meta"><span class="pill pill-legendary" data-i18n="tier.legendary">Legendary</span><span data-i18n="ed.44">44 editions</span></div></div></article>
+        <article class="card" data-rarity="common"><img src="assets/hero-sunny.png" alt="Blue duck — the hero design" loading="lazy"><div class="card-body"><h3 data-i18n="d.sunny">Sunny — Hero</h3><div class="card-meta"><span class="pill pill-common" data-i18n="tier.pondling">Pondling</span><span data-i18n="ed.711">711 editions</span></div></div></article>
+        <article class="card" data-rarity="common"><img src="assets/tier-common-mint.webp" alt="Green duck on the pond" loading="lazy"><div class="card-body"><h3 data-i18n="d.mint">Mint</h3><div class="card-meta"><span class="pill pill-common" data-i18n="tier.pondling">Pondling</span><span data-i18n="ed.711">711 editions</span></div></div></article>
+        <article class="card" data-rarity="common"><img src="assets/tier-common-sky.webp" alt="Yellow duck on the pond" loading="lazy"><div class="card-body"><h3 data-i18n="d.sky">Sky</h3><div class="card-meta"><span class="pill pill-common" data-i18n="tier.pondling">Pondling</span><span data-i18n="ed.711">711 editions</span></div></div></article>
+        <article class="card" data-rarity="common"><img src="assets/tier-common-rose.webp" alt="Pink duck on the pond" loading="lazy"><div class="card-body"><h3 data-i18n="d.rose">Rose</h3><div class="card-meta"><span class="pill pill-common" data-i18n="tier.pondling">Pondling</span><span data-i18n="ed.711">711 editions</span></div></div></article>
+        <article class="card" data-rarity="common"><img src="assets/tier-common-teal.webp" alt="Teal duck on the pond" loading="lazy"><div class="card-body"><h3 data-i18n="d.teal">Teal</h3><div class="card-meta"><span class="pill pill-common" data-i18n="tier.pondling">Pondling</span><span data-i18n="ed.711">711 editions</span></div></div></article>
+        <article class="card" data-rarity="rare"><img src="assets/tier-rare-lavender.webp" alt="Purple duck with flower crown and sunglasses" loading="lazy"><div class="card-body"><h3 data-i18n="d.lavender">Lavender</h3><div class="card-meta"><span class="pill pill-rare" data-i18n="tier.lily">Lily</span><span data-i18n="ed.311">311 editions</span></div></div></article>
+        <article class="card" data-rarity="rare"><img src="assets/tier-rare-tangerine.webp" alt="Orange duck with lily pad and straw hat" loading="lazy"><div class="card-body"><h3 data-i18n="d.tangerine">Tangerine</h3><div class="card-meta"><span class="pill pill-rare" data-i18n="tier.lily">Lily</span><span data-i18n="ed.311">311 editions</span></div></div></article>
+        <article class="card" data-rarity="epic"><img src="assets/tier-epic-golden.webp" alt="Golden duck with crown and golden lei" loading="lazy"><div class="card-body"><h3 data-i18n="d.golden">Golden</h3><div class="card-meta"><span class="pill pill-epic" data-i18n="tier.sunset">Sunset</span><span data-i18n="ed.89">89 editions</span></div></div></article>
+        <article class="card" data-rarity="epic"><img src="assets/tier-epic-silver.webp" alt="Silver duck with crystal scales and pendant" loading="eager"><div class="card-body"><h3 data-i18n="d.silver">Silver</h3><div class="card-meta"><span class="pill pill-epic" data-i18n="tier.sunset">Sunset</span><span data-i18n="ed.89">89 editions</span></div></div></article>
+        <article class="card" data-rarity="legendary"><img src="assets/tier-legendary-dragon.webp" alt="Golden dragon-duck" loading="eager"><div class="card-body"><h3 data-i18n="d.dragon">Dragon</h3><div class="card-meta"><span class="pill pill-legendary" data-i18n="tier.celestial">Celestial</span><span data-i18n="ed.45">45 editions</span></div></div></article>
+        <article class="card" data-rarity="legendary"><img src="assets/tier-legendary-phoenix.webp" alt="Phoenix-duck with fiery plumage" loading="eager"><div class="card-body"><h3 data-i18n="d.phoenix">Phoenix</h3><div class="card-meta"><span class="pill pill-legendary" data-i18n="tier.celestial">Celestial</span><span data-i18n="ed.44">44 editions</span></div></div></article>
       </div>
-      <p class="note" style="margin-top:14px" data-i18n="gal.note">Draws are random from the full deck — a Common colourway is the likely pull (80% of the deck), and any single draw can land a Legendary. The deck order is committed on-chain as a hash before minting opens, so the shuffle can't be changed afterwards.</p>
+      <p class="note" style="margin-top:14px" data-i18n="gal.note">Draws are random from the full deck — a Pondling colourway is the likely pull (80% of the deck), and any single draw can land a Celestial. The deck order is committed on-chain as a hash before minting opens, so the shuffle can't be changed afterwards.</p>
     </div>
   </section>
 
@@ -554,26 +574,26 @@ img,svg,video{max-width:100%}
       <div class="rarity-grid">
         <div class="panel">
           <h3 data-i18n="rar.supplyH">Supply split — 4,444 total</h3>
-          <div class="stackbar" role="img" aria-label="Supply bar: Common 80 percent, Rare 14 percent, Epic 4 percent, Legendary 2 percent">
+          <div class="stackbar" role="img" aria-label="Supply bar: Pondling 80 percent, Lily 14 percent, Sunset 4 percent, Celestial 2 percent">
             <div style="width:80%;background:var(--common)"></div>
             <div style="width:14%;background:var(--rare)"></div>
             <div style="width:4%;background:var(--epic)"></div>
             <div style="width:2%;background:var(--legendary)"></div>
           </div>
           <div class="legend">
-            <span><i style="background:var(--common)"></i><span data-i18n="lg.common">Common 80%</span></span>
-            <span><i style="background:var(--rare)"></i><span data-i18n="lg.rare">Rare 14%</span></span>
-            <span><i style="background:var(--epic)"></i><span data-i18n="lg.epic">Epic 4%</span></span>
-            <span><i style="background:var(--legendary)"></i><span data-i18n="lg.legendary">Legendary 2%</span></span>
+            <span><i style="background:var(--common)"></i><span data-i18n="lg.pondling">Pondling 80%</span></span>
+            <span><i style="background:var(--rare)"></i><span data-i18n="lg.lily">Lily 14%</span></span>
+            <span><i style="background:var(--epic)"></i><span data-i18n="lg.sunset">Sunset 4%</span></span>
+            <span><i style="background:var(--legendary)"></i><span data-i18n="lg.celestial">Celestial 2%</span></span>
           </div>
           <div class="table-scroll">
           <table>
             <thead><tr><th data-i18n="th.tier">Tier</th><th class="num" data-i18n="th.ducks">Ducks</th><th class="num" data-i18n="th.share">Share</th><th class="num" data-i18n="th.claim">$DUCKIE claim / NFT</th></tr></thead>
             <tbody>
-              <tr><td class="tier-name"><i style="background:var(--common)"></i><span data-i18n="tier.common">Common</span></td><td class="num">3,555</td><td class="num">80.0%</td><td class="num">10,000</td></tr>
-              <tr><td class="tier-name"><i style="background:var(--rare)"></i><span data-i18n="tier.rare">Rare</span></td><td class="num">622</td><td class="num">14.0%</td><td class="num">25,000</td></tr>
-              <tr><td class="tier-name"><i style="background:var(--epic)"></i><span data-i18n="tier.epic">Epic</span></td><td class="num">178</td><td class="num">4.0%</td><td class="num">50,000</td></tr>
-              <tr><td class="tier-name"><i style="background:var(--legendary)"></i><span data-i18n="tier.legendary">Legendary</span></td><td class="num">89</td><td class="num">2.0%</td><td class="num">100,000</td></tr>
+              <tr><td class="tier-name"><i style="background:var(--common)"></i><span data-i18n="tier.pondling">Pondling</span></td><td class="num">3,555</td><td class="num">80.0%</td><td class="num">10,000</td></tr>
+              <tr><td class="tier-name"><i style="background:var(--rare)"></i><span data-i18n="tier.lily">Lily</span></td><td class="num">622</td><td class="num">14.0%</td><td class="num">25,000</td></tr>
+              <tr><td class="tier-name"><i style="background:var(--epic)"></i><span data-i18n="tier.sunset">Sunset</span></td><td class="num">178</td><td class="num">4.0%</td><td class="num">50,000</td></tr>
+              <tr><td class="tier-name"><i style="background:var(--legendary)"></i><span data-i18n="tier.celestial">Celestial</span></td><td class="num">89</td><td class="num">2.0%</td><td class="num">100,000</td></tr>
               <tr class="total"><td data-i18n="total.label">Total</td><td class="num">4,444</td><td class="num">100%</td><td class="num" data-i18n="total.max">68,900,000 max</td></tr>
             </tbody>
           </table>
@@ -584,10 +604,10 @@ img,svg,video{max-width:100%}
           <h3 data-i18n="claim.h3">What would your duck claim?</h3>
           <p class="note" style="margin-top:0" data-i18n="claim.p">Tap a tier to see its one-time $DUCKIE claim.</p>
           <div class="tier-picker" role="group" aria-label="Pick a rarity tier">
-            <button class="tier-pick" data-claim="10000" data-tier="Common" aria-pressed="true"><span data-i18n="tier.common">Common</span><small data-i18n="pick.common">3,555 ducks · 80%</small></button>
-            <button class="tier-pick" data-claim="25000" data-tier="Rare" aria-pressed="false"><span data-i18n="tier.rare">Rare</span><small data-i18n="pick.rare">622 ducks · 14%</small></button>
-            <button class="tier-pick" data-claim="50000" data-tier="Epic" aria-pressed="false"><span data-i18n="tier.epic">Epic</span><small data-i18n="pick.epic">178 ducks · 4%</small></button>
-            <button class="tier-pick" data-claim="100000" data-tier="Legendary" aria-pressed="false"><span data-i18n="tier.legendary">Legendary</span><small data-i18n="pick.legendary">89 ducks · 2%</small></button>
+            <button class="tier-pick" data-claim="10000" data-tier="Pondling" aria-pressed="true"><span data-i18n="tier.pondling">Pondling</span><small data-i18n="pick.pondling">3,555 ducks · 80%</small></button>
+            <button class="tier-pick" data-claim="25000" data-tier="Lily" aria-pressed="false"><span data-i18n="tier.lily">Lily</span><small data-i18n="pick.lily">622 ducks · 14%</small></button>
+            <button class="tier-pick" data-claim="50000" data-tier="Sunset" aria-pressed="false"><span data-i18n="tier.sunset">Sunset</span><small data-i18n="pick.sunset">178 ducks · 4%</small></button>
+            <button class="tier-pick" data-claim="100000" data-tier="Celestial" aria-pressed="false"><span data-i18n="tier.celestial">Celestial</span><small data-i18n="pick.celestial">89 ducks · 2%</small></button>
           </div>
           <p style="margin:10px 0 2px;color:var(--muted);font-weight:700;font-size:.88rem" id="claimTierLabel">COMMON — ONE-TIME CLAIM</p>
           <p class="claim-big"><span id="claimAmount">10,000</span> $DUCKIE</p>
@@ -780,21 +800,21 @@ en: {
 "hero.lede": `Duckie is a 4,444-piece collection of cute pond ducks on BNB Chain. Minting is agent-only — your AI agent draws a random duck from a shuffled on-chain deck — and every duck unlocks a one-time $DUCKIE token claim based on its rarity.`,
 "hero.cta1": `Mint now`, "hero.cta2": `Browse the 11 designs`,
 "fact.supply": `Total supply`, "fact.maxWallet": `Max per wallet`, "fact.mints": `mints`, "fact.maxCost": `Max wallet cost`, "fact.royalty": `Royalty`,
-"live.h2": `Live Status`, "live.p": `Watch the duck come to life. It starts out grey — and the more of the 4,444 that get minted, the more colour it gains, until it shines in full colour at sold out.`,
-"live.live": `Preview`, "live.of": `/ 4,444 minted`, "live.graynote": `grey while nothing is minted — full colour at sold out.`,
+"live.h2": `Live Status`, "live.p": `Watch the pond bloom. Every 10% minted, another lily pad opens — when all 4,444 are minted, the whole pond is in flower.`,
+"live.live": `Preview`, "live.of": `/ 4,444 minted`, "live.graynote": `one lily pad blooms per 10% minted.`,
 "live.note": `Minted count read live from the Duckie contract on BNB Chain · refreshes every 30 seconds.`,
 "live.stockH": `Remaining stock by rarity`, "live.leftLine": `{r} left`, "live.tierLine": `{m} minted · of {t} total`,
-"gal.h2": `The 11 designs`, "gal.p": `Five Common colourways, two Rare, two Epic, and two Legendary. You don't pick your duck — the deck does. Each design's edition count is fixed in the deck before launch.`,
-"filter.all": `All 11`, "tier.common": `Common`, "tier.rare": `Rare`, "tier.epic": `Epic`, "tier.legendary": `Legendary`,
+"gal.h2": `The 11 designs`, "gal.p": `Five Pondling colourways, two Lily, two Sunset, and two Celestial. Swipe through all 11 — you don't pick your duck, the deck does. Each design's edition count is fixed in the deck before launch.`,
+"filter.all": `All 11`, "tier.pondling": `Pondling`, "tier.lily": `Lily`, "tier.sunset": `Sunset`, "tier.celestial": `Celestial`,
 "ed.711": `711 editions`, "ed.311": `311 editions`, "ed.89": `89 editions`, "ed.45": `45 editions`, "ed.44": `44 editions`,
-"d.sunny": `Blue — Hero`, "d.mint": `Green`, "d.sky": `Yellow`, "d.rose": `Pink`, "d.teal": `Teal`, "d.lavender": `Purple`, "d.tangerine": `Orange`, "d.golden": `Golden`, "d.silver": `Silver`, "d.dragon": `Dragon`, "d.phoenix": `Phoenix`,
-"gal.note": `Draws are random from the full deck — a Common colourway is the likely pull (80% of the deck), and any single draw can land a Legendary. The deck order is committed on-chain as a hash before minting opens, so the shuffle can't be changed afterwards.`,
+"d.sunny": `Sunny — Hero`, "d.mint": `Mint`, "d.sky": `Sky`, "d.rose": `Rose`, "d.teal": `Teal`, "d.lavender": `Lavender`, "d.tangerine": `Tangerine`, "d.golden": `Golden`, "d.silver": `Silver`, "d.dragon": `Dragon`, "d.phoenix": `Phoenix`,
+"gal.note": `Draws are random from the full deck — a Pondling colourway is the likely pull (80% of the deck), and any single draw can land a Celestial. The deck order is committed on-chain as a hash before minting opens, so the shuffle can't be changed afterwards.`,
 "rar.h2": `Rarity, matched to the token`, "rar.p": `Supply is split 80 / 14 / 4 / 2 across the four tiers — and the $DUCKIE claim follows the same ladder. Rarer duck, bigger one-time claim. One claim per NFT, ever.`,
-"rar.supplyH": `Supply split — 4,444 total`, "lg.common": `Common 80%`, "lg.rare": `Rare 14%`, "lg.epic": `Epic 4%`, "lg.legendary": `Legendary 2%`,
+"rar.supplyH": `Supply split — 4,444 total`, "lg.pondling": `Pondling 80%`, "lg.lily": `Lily 14%`, "lg.sunset": `Sunset 4%`, "lg.celestial": `Celestial 2%`,
 "th.tier": `Tier`, "th.ducks": `Ducks`, "th.share": `Share`, "th.claim": `$DUCKIE claim / NFT`, "total.label": `Total`, "total.max": `68,900,000 max`,
 "rar.note": `If every duck is minted and claimed, total claims reach 68,900,000 $DUCKIE — inside the token's hard cap of 100,000,000. Claims are tracked per token ID on-chain, so an NFT can never be claimed twice.`,
 "claim.h3": `What would your duck claim?`, "claim.p": `Tap a tier to see its one-time $DUCKIE claim.`,
-"pick.common": `3,555 ducks · 80%`, "pick.rare": `622 ducks · 14%`, "pick.epic": `178 ducks · 4%`, "pick.legendary": `89 ducks · 2%`,
+"pick.pondling": `3,555 ducks · 80%`, "pick.lily": `622 ducks · 14%`, "pick.sunset": `178 ducks · 4%`, "pick.celestial": `89 ducks · 2%`,
 "claim.suffix": ` — ONE-TIME CLAIM`, "claim.note": `Claim opens after launch. The claim belongs to the NFT: if you sell the duck before claiming, the buyer gets the claim.`,
 "mint.h2": `Mint prices — a ladder, not a flat fee`, "mint.p": `Your first mint is free. After that, the price steps up the deeper you go — the same ladder for every wallet, read live from the contract at mint time. Maximum 30 mints per wallet, 0.0138 BNB all-in.`,
 "step.r1": `Mint #1`, "step.free": `FREE`, "step.n1": `One free draw per wallet. Gas only.`,
@@ -850,27 +870,27 @@ zh: {
 "nav.designs": `设计`, "nav.how": `铸造方式`, "nav.rarity": `稀有度`, "nav.contracts": `合约`, "nav.marketplace": `交易市场`, "nav.status": `状态`, "nav.mint": `铸造`,
 "menu.mintTag": `已开启 →`, "menu.howTag": `智能体铸造 →`, "menu.designsTag": `11 款设计 →`, "menu.rarityTag": `4 个等级 →`, "menu.duckTag": `领取 →`, "menu.marketTag": `交易 →`, "menu.share": `X 帖子`, "menu.shareTag": `分享 →`, "menu.faqTag": `状态 →`, "menu.open": `打开菜单`, "menu.close": `关闭菜单`,
 "banner": `<strong>预览 —</strong> 铸造<strong>尚未开启</strong>。这是 Duckie 在 BNB Chain 上的预览页。合约将在你的指令下部署——首次铸造免费，之后按阶梯 0.0002–0.0008 BNB，每个钱包最多 30 次。`,
-"hero.supply": `总量`, "hero.firstMint": `首次铸造`, "hero.eyebrow": `小蛇 · 大大的海岛能量`,
-"hero.h1": `一条蓝蛇、一片落日海滩，<em>还有 4,443 个朋友。</em>`,
-"hero.lede": `Duckie 是 BNB Chain 上 4,444 件可爱的海滩蛇系列。铸造仅限智能体——你的 AI 智能体从链上洗牌后的牌组中随机抽取一条蛇——每条蛇都能按其稀有度解锁一次性 $DUCKIE 代币领取。`,
+"hero.supply": `总量`, "hero.firstMint": `首次铸造`, "hero.eyebrow": `小鸭子 · 大大的池塘能量`,
+"hero.h1": `一只小鸭、一个金色池塘，<em>还有 4,443 个朋友。</em>`,
+"hero.lede": `Duckie 是 BNB Chain 上 4,444 只可爱的池塘鸭系列。铸造仅限智能体——你的 AI 智能体从链上洗牌后的牌组中随机抽取一只鸭子——每只鸭子都能按其稀有度解锁一次性 $DUCKIE 代币领取。`,
 "hero.cta1": `立即铸造`, "hero.cta2": `浏览 11 款设计`,
 "fact.supply": `总供应量`, "fact.maxWallet": `每钱包上限`, "fact.mints": `次铸造`, "fact.maxCost": `每钱包最高成本`, "fact.royalty": `版税`,
-"live.h2": `实时状态`, "live.p": `看着这条蛇活起来。它一开始是灰色的——4,444 条中被铸造得越多，它的颜色就越丰富，直到售罄时焕发全彩。`,
-"live.live": `预览`, "live.of": `/ 4,444 已铸造`, "live.graynote": `尚未铸造时为灰色——售罄时变为全彩。`,
+"live.h2": `实时状态`, "live.p": `看着池塘开花。每铸造 10%，就有一片睡莲绽放——4,444 只全部铸造完毕时，整个池塘盛开。`,
+"live.live": `预览`, "live.of": `/ 4,444 已铸造`, "live.graynote": `每铸造 10%，绽放一片睡莲。`,
 "live.note": `已铸造数量从 BNB Chain 上的 Duckie 合约实时读取 · 每 30 秒刷新。`,
 "live.stockH": `各稀有度剩余库存`, "live.leftLine": `剩余 {r}`, "live.tierLine": `已铸造 {m} · 共 {t}`,
-"gal.h2": `11 款设计`, "gal.p": `五款普通配色、两款稀有、两款史诗、两款传奇。你的蛇不是你挑的——由牌组决定。每款设计的版数在上线前就已固定在牌组中。`,
-"filter.all": `全部 11`, "tier.common": `普通`, "tier.rare": `稀有`, "tier.epic": `史诗`, "tier.legendary": `传奇`,
+"gal.h2": `11 款设计`, "gal.p": `五款池塘鸭配色、两款睡莲、两款晚霞、两款天翔。你的鸭子不是你挑的——由牌组决定。每款设计的版数在上线前就已固定在牌组中。`,
+"filter.all": `全部 11`, "tier.pondling": `池塘鸭`, "tier.lily": `睡莲`, "tier.sunset": `晚霞`, "tier.celestial": `天翔`,
 "ed.711": `711 版`, "ed.311": `311 版`, "ed.89": `89 版`, "ed.45": `45 版`, "ed.44": `44 版`,
-"d.sunny": `蓝色 — 主打款`, "d.mint": `绿色`, "d.sky": `黄色`, "d.rose": `粉色`, "d.teal": `青绿色`, "d.lavender": `紫色`, "d.tangerine": `橙色`, "d.golden": `金色`, "d.silver": `银色`, "d.dragon": `龙`, "d.phoenix": `凤凰`,
-"gal.note": `抽取从完整牌组中随机进行——抽到普通配色的概率最高（占牌组 80%），但任何一次抽取都可能抽到传奇。牌组顺序在铸造开放前已以哈希形式提交到链上，之后无法更改洗牌结果。`,
-"rar.h2": `稀有度与代币挂钩`, "rar.p": `供应量按 80 / 14 / 4 / 2 分配到四个等级——$DUCKIE 领取也遵循同样的阶梯。蛇越稀有，一次性领取越多。每个 NFT 只能领取一次。`,
-"rar.supplyH": `供应分配 — 共 4,444`, "lg.common": `普通 80%`, "lg.rare": `稀有 14%`, "lg.epic": `史诗 4%`, "lg.legendary": `传奇 2%`,
-"th.tier": `等级`, "th.ducks": `蛇数量`, "th.share": `占比`, "th.claim": `每 NFT 可领 $DUCKIE`, "total.label": `合计`, "total.max": `上限 68,900,000`,
-"rar.note": `如果每条蛇都被铸造并领取，总领取量将达到 68,900,000 $DUCKIE——在代币 100,000,000 的硬上限之内。领取按代币 ID 在链上记录，因此一个 NFT 永远无法被重复领取。`,
-"claim.h3": `你的蛇能领多少？`, "claim.p": `点选一个等级，查看它的一次性 $DUCKIE 领取量。`,
-"pick.common": `3,555 条 · 80%`, "pick.rare": `622 条 · 14%`, "pick.epic": `178 条 · 4%`, "pick.legendary": `89 条 · 2%`,
-"claim.suffix": ` — 一次性领取`, "claim.note": `领取将在上线后开放。领取权属于 NFT：如果你在领取前卖掉这条蛇，买家将获得领取权。`,
+"d.sunny": `阳光 — 主打款`, "d.mint": `薄荷`, "d.sky": `天空`, "d.rose": `玫瑰`, "d.teal": `青绿色`, "d.lavender": `薰衣草`, "d.tangerine": `蜜柑`, "d.golden": `金色`, "d.silver": `银色`, "d.dragon": `龙`, "d.phoenix": `凤凰`,
+"gal.note": `抽取从完整牌组中随机进行——抽到池塘鸭配色的概率最高（占牌组 80%），但任何一次抽取都可能抽到天翔。牌组顺序在铸造开放前已以哈希形式提交到链上，之后无法更改洗牌结果。`,
+"rar.h2": `稀有度与代币挂钩`, "rar.p": `供应量按 80 / 14 / 4 / 2 分配到四个等级——$DUCKIE 领取也遵循同样的阶梯。鸭子越稀有，一次性领取越多。每个 NFT 只能领取一次。`,
+"rar.supplyH": `供应分配 — 共 4,444`, "lg.pondling": `池塘鸭 80%`, "lg.lily": `睡莲 14%`, "lg.sunset": `晚霞 4%`, "lg.celestial": `天翔 2%`,
+"th.tier": `等级`, "th.ducks": `鸭子数量`, "th.share": `占比`, "th.claim": `每 NFT 可领 $DUCKIE`, "total.label": `合计`, "total.max": `上限 68,900,000`,
+"rar.note": `如果每只鸭子都被铸造并领取，总领取量将达到 68,900,000 $DUCKIE——在代币 100,000,000 的硬上限之内。领取按代币 ID 在链上记录，因此一个 NFT 永远无法被重复领取。`,
+"claim.h3": `你的鸭子能领多少？`, "claim.p": `点选一个等级，查看它的一次性 $DUCKIE 领取量。`,
+"pick.pondling": `3,555 只 · 80%`, "pick.lily": `622 只 · 14%`, "pick.sunset": `178 只 · 4%`, "pick.celestial": `89 只 · 2%`,
+"claim.suffix": ` — 一次性领取`, "claim.note": `领取将在上线后开放。领取权属于 NFT：如果你在领取前卖掉这只鸭子，买家将获得领取权。`,
 "mint.h2": `铸造价格 — 阶梯定价，不是固定费用`, "mint.p": `你的第一次铸造免费。之后，铸造越深价格逐级上升——每个钱包都遵循同一阶梯，价格在铸造时直接从合约读取。每个钱包最多 30 次铸造，全部成本 0.0138 BNB。`,
 "step.r1": `铸造 #1`, "step.free": `免费`, "step.n1": `每个钱包一次免费抽取。仅需 Gas。`,
 "step.r2": `铸造 #2 – 10`, "price.each": `BNB / 次`, "step.n2": `9 次铸造 · 整段共 0.0018 BNB。`,
@@ -878,11 +898,11 @@ zh: {
 "step.r4": `铸造 #21 – 30`, "step.n4": `10 次铸造 · 整段共 0.008 BNB。`,
 "calc.h3": `成本计算器`, "calc.label": `一个钱包要铸造多少次？`, "calc.note": `第一次铸造免费，之后按阶梯每铸造一次 0.0002 / 0.0004 / 0.0008 BNB。不含 Gas。铸造 30 次时总计正好 0.0138 BNB——合约会拒绝超出部分。`,
 "calc.out1": `{n} 次铸造 · 总计 {x} BNB`, "calc.outN": `{n} 次铸造 · 总计 {x} BNB`,
-"panel.h3": `铸造你的蛇`, "panel.live": `铸造进行中`,
+"panel.h3": `铸造你的鸭子`, "panel.live": `铸造进行中`,
 "panel.p": `铸造仅限智能体：你的钱包必须持有 SPACE ID Agent ID（链上验证）。连接你的 Binance Agentic Wallet——页面会自动切换到 BNB Chain——选择数量即可铸造。确认前，总价会从合约实时报价。`,
 "panel.connect": `连接钱包`, "panel.connected": `已连接：{a}`, "panel.noWallet": `钱包未连接`, "panel.qty": `数量 · 每钱包最多 30`, "panel.total": `总计`,
 "panel.freeIn": `包含你的免费首次铸造`, "panel.freeUsed": `免费铸造已使用`, "panel.yours": `你的铸造次数：{c} / 30`, "panel.agentOk": `已检测到此钱包的 Agent ID。`, "panel.agentNo": `此钱包未检测到 Agent ID——铸造将被拒绝。请先获取 SPACE ID Agent ID。`,
-"panel.mintBtn": `铸造`, "panel.mintBtnN": `铸造 {n} 条`,
+"panel.mintBtn": `铸造`, "panel.mintBtnN": `铸造 {n} 只`,
 "panel.stConnect": `请先连接钱包。`, "panel.stNoWallet": `未找到钱包。请在钱包自带浏览器（Binance Agentic Wallet 或 MetaMask）中打开本页，或使用下方的智能体提示词。`,
 "panel.stRejected": `钱包拒绝了连接或交易。`, "panel.stPending": `交易已发送——正在等待 BNB Chain 确认…`,
 "panel.stSuccess": `铸造成功！交易：`, "panel.stFailed": `铸造失败。请确认你的钱包持有 Agent ID、已切换到 BNB Chain，并且 BNB 足够支付总价和 Gas。`,
@@ -896,13 +916,13 @@ zh: {
 "how.t2": `让你的智能体来铸造`, "how.p2": `在上方面板连接你的智能体钱包，或让你的 AI 智能体（Binance Agentic Wallet）为你铸造——它会从合约的 <code>quoteBulk()</code> 读取确切价格，向你展示预览，并在你确认后才铸造。`,
 "how.t3": `由牌组决定`, "how.p3": `每次铸造都会从洗好的牌组中抽取下一张——设计和稀有度在抽取落地前都是惊喜。多付的金额会在同一笔交易中退回。`,
 "how.t4": `领取你的 $DUCKIE`, "how.p4": `领取开放后，每个未领取的 NFT 将按其等级支付 $DUCKIE——10,000 到 100,000——且仅此一次。`,
-"mkt.h2": `交易市场`, "mkt.p": `等蛇都来到海滩后，交易将在两个地方进行：我们为本系列部署的自有托管交易市场，以及用于二级交易的 Element Market。`,
-"mkt.ownH": `自有交易市场`, "mkt.ownP": `为 Duckie 部署的固定价格托管交易市场。当你上架一条蛇时，NFT 会安全地托管在市场合约中，直到售出或你取消为止——无需点对点互信。`,
+"mkt.h2": `交易市场`, "mkt.p": `等鸭子们都来到池塘后，交易将在两个地方进行：我们为本系列部署的自有托管交易市场，以及用于二级交易的 Element Market。`,
+"mkt.ownH": `自有交易市场`, "mkt.ownP": `为 Duckie 部署的固定价格托管交易市场。当你上架一只鸭子时，NFT 会安全地托管在市场合约中，直到售出或你取消为止——无需点对点互信。`,
 "mkt.f1": `<strong>0% 平台手续费</strong>&nbsp;——卖家保留全部售价，仅扣除版税。`,
 "mkt.f2": `<strong>每笔交易 5% 版税归所有者</strong>，由合约强制执行。`,
 "mkt.f3": `<strong>上架 · 购买 · 取消</strong>&nbsp;——仅限固定价格挂单，通过托管结算。`,
 "mkt.status": `<strong>暂无挂单。</strong>市场将在铸造上线后开启——持有者挂单出售后，挂单将显示在这里。`,
-"mkt.elH": `Element Market`, "mkt.elP": `Duckie 也已上线 Element Market——一个第三方二级交易市场。你现在就可以在那里浏览本系列；等蛇被铸造并由持有者上架后，即可在 Element 上交易。`,
+"mkt.elH": `Element Market`, "mkt.elP": `Duckie 也已上线 Element Market——一个第三方二级交易市场。你现在就可以在那里浏览本系列；等鸭子被铸造并由持有者上架后，即可在 Element 上交易。`,
 "mkt.elBtn": `在 Element 上交易 →`,
 "share.h2": `X 帖子卡片`, "share.p": `一份可直接分享到 X 的帖子——海报和文案都已准备好。铸造尚未开启，因此目前为预览草稿。`,
 "share.badge": `已上线`, "share.btn": `发布到 X`, "share.note": `在新标签页中打开 X 编辑器，上面的文案已预先填好。`,
@@ -925,27 +945,27 @@ ja: {
 "nav.designs": `デザイン`, "nav.how": `ミント方法`, "nav.rarity": `レアリティ`, "nav.contracts": `コントラクト`, "nav.marketplace": `マーケットプレイス`, "nav.status": `ステータス`, "nav.mint": `ミント`,
 "menu.mintTag": `開始しました →`, "menu.howTag": `エージェントミント →`, "menu.designsTag": `11 デザイン →`, "menu.rarityTag": `4 ティア →`, "menu.duckTag": `請求 →`, "menu.marketTag": `取引 →`, "menu.share": `X 投稿`, "menu.shareTag": `シェア →`, "menu.faqTag": `ステータス →`, "menu.open": `メニューを開く`, "menu.close": `メニューを閉じる`,
 "banner": `<strong>プレビュー —</strong> ミントは<strong>まだ開始していません</strong>。これは BNB Chain 上の Duckie のプレビューページです。コントラクトはあなたの指示でデプロイされます。初回ミント無料、その後 0.0002–0.0008 BNB の段階価格、1 ウォレット最大 30 個。`,
-"hero.supply": `供給量`, "hero.firstMint": `初回ミント`, "hero.eyebrow": `小さな蛇 · 大きな島のエネルギー`,
-"hero.h1": `青い蛇と夕日のビーチ、<em>そして 4,443 匹の仲間たち。</em>`,
-"hero.lede": `Duckie は BNB Chain 上の 4,444 点の可愛いビーチ蛇コレクションです。ミントはエージェント専用——AI エージェントがオンチェーンでシャッフルされたデッキからランダムに 1 匹を引きます——そしてすべての蛇がレアリティに応じた一回限りの $DUCKIE トークン請求をアンロックします。`,
+"hero.supply": `供給量`, "hero.firstMint": `初回ミント`, "hero.eyebrow": `小さなアヒル · 大きな池のエネルギー`,
+"hero.h1": `小さなアヒルと金色の池、<em>そして 4,443 羽の仲間たち。</em>`,
+"hero.lede": `Duckie は BNB Chain 上の 4,444 羽の可愛い池のアヒルコレクションです。ミントはエージェント専用——AI エージェントがオンチェーンでシャッフルされたデッキからランダムに 1 羽を引きます——そしてすべてのアヒルがレアリティに応じた一回限りの $DUCKIE トークン請求をアンロックします。`,
 "hero.cta1": `今すぐミント`, "hero.cta2": `11 デザインを見る`,
 "fact.supply": `総供給量`, "fact.maxWallet": `ウォレット上限`, "fact.mints": `回ミント`, "fact.maxCost": `ウォレット最大コスト`, "fact.royalty": `ロイヤルティ`,
-"live.h2": `ライブステータス`, "live.p": `蛇が命を吹き込まれる様子を見守りましょう。最初はグレーですが、4,444 匹のうちミントされる数が増えるほど色づき、完売時にはフルカラーで輝きます。`,
-"live.live": `プレビュー`, "live.of": `/ 4,444 ミント済み`, "live.graynote": `未ミントの間はグレー——完売でフルカラーになります。`,
+"live.h2": `ライブステータス`, "live.p": `池に花が咲くのを見守りましょう。ミントが 10% 進むごとにスイレンの葉が 1 枚咲き、4,444 羽がすべてミントされると池全体が満開になります。`,
+"live.live": `プレビュー`, "live.of": `/ 4,444 ミント済み`, "live.graynote": `ミントが 10% 進むごとに、スイレンの葉が 1 枚咲きます。`,
 "live.note": `ミント数は BNB Chain 上の Duckie コントラクトからライブ取得 · 30 秒ごとに更新。`,
 "live.stockH": `レアリティ別の残り在庫`, "live.leftLine": `残り {r}`, "live.tierLine": `{m} ミント済み · 全 {t}`,
-"gal.h2": `11 のデザイン`, "gal.p": `コモン 5 色、レア 2 種、エピック 2 種、レジェンダリー 2 種。あなたの蛇は自分で選べません——デッキが決めます。各デザインの版数はローンチ前にデッキへ固定されています。`,
-"filter.all": `全 11 種`, "tier.common": `コモン`, "tier.rare": `レア`, "tier.epic": `エピック`, "tier.legendary": `レジェンダリー`,
+"gal.h2": `11 のデザイン`, "gal.p": `池のアヒル 5 色、スイレン 2 種、夕映え 2 種、天翔 2 種。あなたのアヒルは自分で選べません——デッキが決めます。各デザインの版数はローンチ前にデッキへ固定されています。`,
+"filter.all": `全 11 種`, "tier.pondling": `池のアヒル`, "tier.lily": `スイレン`, "tier.sunset": `夕映え`, "tier.celestial": `天翔`,
 "ed.711": `711 エディション`, "ed.311": `311 エディション`, "ed.89": `89 エディション`, "ed.45": `45 エディション`, "ed.44": `44 エディション`,
-"d.sunny": `ブルー — ヒーロー`, "d.mint": `グリーン`, "d.sky": `イエロー`, "d.rose": `ピンク`, "d.teal": `ティール`, "d.lavender": `パープル`, "d.tangerine": `オレンジ`, "d.golden": `ゴールデン`, "d.silver": `シルバー`, "d.dragon": `ドラゴン`, "d.phoenix": `フェニックス`,
-"gal.note": `ドローはフルデッキからランダムです——コモンが最も出やすく（デッキの 80%）、どのドローでもレジェンダリーが当たる可能性があります。デッキの順序はミント開始前にハッシュとしてオンチェーンにコミットされ、後からシャッフルを変更することはできません。`,
-"rar.h2": `レアリティとトークン`, "rar.p": `供給量は 4 ティアに 80 / 14 / 4 / 2 で分配され、$DUCKIE の請求も同じラダーに従います。蛇がレアなほど、一回限りの請求額も大きくなります。1 NFT につき請求は一度だけです。`,
-"rar.supplyH": `供給配分 — 全 4,444`, "lg.common": `コモン 80%`, "lg.rare": `レア 14%`, "lg.epic": `エピック 4%`, "lg.legendary": `レジェンダリー 2%`,
-"th.tier": `ティア`, "th.ducks": `蛇の数`, "th.share": `割合`, "th.claim": `NFT ごとの $DUCKIE 請求`, "total.label": `合計`, "total.max": `最大 68,900,000`,
-"rar.note": `すべての蛇がミントされ請求されると、請求総額は 68,900,000 $DUCKIE に達します——トークンのハードキャップ 100,000,000 の範囲内です。請求はトークン ID ごとにオンチェーンで記録されるため、同じ NFT が二度請求されることはありません。`,
-"claim.h3": `あなたの蛇はいくら請求できる？`, "claim.p": `ティアをタップすると一回限りの $DUCKIE 請求額が表示されます。`,
-"pick.common": `3,555 匹 · 80%`, "pick.rare": `622 匹 · 14%`, "pick.epic": `178 匹 · 4%`, "pick.legendary": `89 匹 · 2%`,
-"claim.suffix": ` — 一回限りの請求`, "claim.note": `請求はローンチ後に開始します。請求権は NFT に属します：請求前に蛇を売却すると、買い手が請求権を得ます。`,
+"d.sunny": `サニー — ヒーロー`, "d.mint": `ミント`, "d.sky": `スカイ`, "d.rose": `ローズ`, "d.teal": `ティール`, "d.lavender": `ラベンダー`, "d.tangerine": `タンジェリン`, "d.golden": `ゴールデン`, "d.silver": `シルバー`, "d.dragon": `ドラゴン`, "d.phoenix": `フェニックス`,
+"gal.note": `ドローはフルデッキからランダムです——池のアヒルが最も出やすく（デッキの 80%）、どのドローでも天翔が当たる可能性があります。デッキの順序はミント開始前にハッシュとしてオンチェーンにコミットされ、後からシャッフルを変更することはできません。`,
+"rar.h2": `レアリティとトークン`, "rar.p": `供給量は 4 ティアに 80 / 14 / 4 / 2 で分配され、$DUCKIE の請求も同じラダーに従います。アヒルがレアなほど、一回限りの請求額も大きくなります。1 NFT につき請求は一度だけです。`,
+"rar.supplyH": `供給配分 — 全 4,444`, "lg.pondling": `池のアヒル 80%`, "lg.lily": `スイレン 14%`, "lg.sunset": `夕映え 4%`, "lg.celestial": `天翔 2%`,
+"th.tier": `ティア`, "th.ducks": `アヒルの数`, "th.share": `割合`, "th.claim": `NFT ごとの $DUCKIE 請求`, "total.label": `合計`, "total.max": `最大 68,900,000`,
+"rar.note": `すべてのアヒルがミントされ請求されると、請求総額は 68,900,000 $DUCKIE に達します——トークンのハードキャップ 100,000,000 の範囲内です。請求はトークン ID ごとにオンチェーンで記録されるため、同じ NFT が二度請求されることはありません。`,
+"claim.h3": `あなたのアヒルはいくら請求できる？`, "claim.p": `ティアをタップすると一回限りの $DUCKIE 請求額が表示されます。`,
+"pick.pondling": `3,555 羽 · 80%`, "pick.lily": `622 羽 · 14%`, "pick.sunset": `178 羽 · 4%`, "pick.celestial": `89 羽 · 2%`,
+"claim.suffix": ` — 一回限りの請求`, "claim.note": `請求はローンチ後に開始します。請求権は NFT に属します：請求前にアヒルを売却すると、買い手が請求権を得ます。`,
 "mint.h2": `ミント価格 — 一律料金ではなくラダー方式`, "mint.p": `初回ミントは無料です。その後は深く進むほど価格が上がります——すべてのウォレットに同じラダーが適用され、価格はミント時にコントラクトから読み取られます。ウォレットあたり最大 30 回、合計 0.0138 BNB です。`,
 "step.r1": `ミント #1`, "step.free": `無料`, "step.n1": `ウォレットごとに 1 回無料ドロー。ガス代のみ。`,
 "step.r2": `ミント #2 – 10`, "price.each": `BNB / 回`, "step.n2": `9 回ミント · このステップ合計 0.0018 BNB。`,
@@ -953,11 +973,11 @@ ja: {
 "step.r4": `ミント #21 – 30`, "step.n4": `10 回ミント · このステップ合計 0.008 BNB。`,
 "calc.h3": `コスト計算機`, "calc.label": `1 つのウォレットで何回ミントしますか？`, "calc.note": `初回は無料、その後はステップごとに 1 回 0.0002 / 0.0004 / 0.0008 BNB。ガス代は含みません。30 回では合計ちょうど 0.0138 BNB となり、それを超える分はコントラクトが拒否します。`,
 "calc.out1": `{n} 回ミント · 合計 {x} BNB`, "calc.outN": `{n} 回ミント · 合計 {x} BNB`,
-"panel.h3": `あなたの蛇をミント`, "panel.live": `ミント開始`,
+"panel.h3": `あなたのアヒルをミント`, "panel.live": `ミント開始`,
 "panel.p": `ミントはエージェント専用です：ウォレットが SPACE ID Agent ID を保持している必要があります（オンチェーンで確認）。Binance Agentic Wallet を接続してください——ページが自動で BNB Chain に切り替えます——数量を選んでミントしましょう。合計額は確認前にコントラクトからライブで見積もられます。`,
 "panel.connect": `ウォレットを接続`, "panel.connected": `接続済み：{a}`, "panel.noWallet": `ウォレット未接続`, "panel.qty": `数量 · ウォレットあたり最大 30`, "panel.total": `合計`,
 "panel.freeIn": `初回ミント無料分を含みます`, "panel.freeUsed": `無料ミントは使用済みです`, "panel.yours": `あなたのミント数：{c} / 30`, "panel.agentOk": `このウォレットで Agent ID が検出されました。`, "panel.agentNo": `このウォレットに Agent ID が見つかりません——ミントはリバートします。先に SPACE ID Agent ID を取得してください。`,
-"panel.mintBtn": `ミント`, "panel.mintBtnN": `{n} 匹ミント`,
+"panel.mintBtn": `ミント`, "panel.mintBtnN": `{n} 羽ミント`,
 "panel.stConnect": `まずウォレットを接続してください。`, "panel.stNoWallet": `ウォレットが見つかりません。ウォレットのブラウザ（Binance Agentic Wallet または MetaMask）内でこのページを開くか、下のエージェント用プロンプトを使ってください。`,
 "panel.stRejected": `ウォレットで接続または取引が拒否されました。`, "panel.stPending": `取引を送信しました——BNB Chain での確認を待っています…`,
 "panel.stSuccess": `ミントが確定しました！Tx：`, "panel.stFailed": `ミントに失敗しました。ウォレットが Agent ID を保持していること、BNB Chain に接続していること、合計額とガス代分の BNB があることを確認してください。`,
@@ -971,13 +991,13 @@ ja: {
 "how.t2": `エージェントにミントを依頼`, "how.p2": `上のパネルでエージェントウォレットを接続するか、AI エージェント（Binance Agentic Wallet）にミントを依頼してください——エージェントはコントラクトの <code>quoteBulk()</code> から正確な価格を読み取り、プレビューを表示し、あなたが確認した後にのみミントします。`,
 "how.t3": `デッキが決める`, "how.p3": `各ミントはシャッフルされたデッキから次のカードを引きます——デザインとレアリティはドローが確定するまでサプライズです。過払い分は同じトランザクションで返金されます。`,
 "how.t4": `$DUCKIE を請求`, "how.p4": `請求が開始すると、未請求の NFT はティアに応じた $DUCKIE（10,000 ～ 100,000）を正確に一度だけ支払います。`,
-"mkt.h2": `マーケットプレイス`, "mkt.p": `蛇たちがビーチに揃ったら、取引は 2 か所で行われます：このコレクションのためにデプロイされた独自のエスクロー型マーケットプレイスと、二次取引向けの Element Market です。`,
-"mkt.ownH": `独自マーケットプレイス`, "mkt.ownP": `Duckie のためにデプロイされた固定価格のエスクロー型マーケットプレイスです。蛇を出品すると、NFT は売却されるかキャンセルされるまでマーケットプレイスのコントラクトに安全に保管されます——個人間の信頼は不要です。`,
+"mkt.h2": `マーケットプレイス`, "mkt.p": `アヒルたちが池に揃ったら、取引は 2 か所で行われます：このコレクションのためにデプロイされた独自のエスクロー型マーケットプレイスと、二次取引向けの Element Market です。`,
+"mkt.ownH": `独自マーケットプレイス`, "mkt.ownP": `Duckie のためにデプロイされた固定価格のエスクロー型マーケットプレイスです。アヒルを出品すると、NFT は売却されるかキャンセルされるまでマーケットプレイスのコントラクトに安全に保管されます——個人間の信頼は不要です。`,
 "mkt.f1": `<strong>プラットフォーム手数料 0%</strong>&nbsp;——売り手はロイヤルティを除いた売却額を全額受け取ります。`,
 "mkt.f2": `<strong>すべての売却で所有者に 5% のロイヤルティ</strong>、コントラクトにより強制されます。`,
 "mkt.f3": `<strong>出品 · 購入 · キャンセル</strong>&nbsp;——固定価格の出品のみ、エスクローで決済されます。`,
 "mkt.status": `<strong>まだ出品はありません。</strong>マーケットプレイスはミント開始後にオープンします。所有者が出品するとここに表示されます。`,
-"mkt.elH": `Element Market`, "mkt.elP": `Duckie はサードパーティの二次マーケットプレイスである Element Market にも掲載されています。今すぐコレクションを閲覧でき、蛇がミントされ所有者が出品すれば Element で取引できます。`,
+"mkt.elH": `Element Market`, "mkt.elP": `Duckie はサードパーティの二次マーケットプレイスである Element Market にも掲載されています。今すぐコレクションを閲覧でき、アヒルがミントされ所有者が出品すれば Element で取引できます。`,
 "mkt.elBtn": `Element で取引 →`,
 "share.h2": `X 投稿カード`, "share.p": `X へシェアできる投稿——ポスターとキャプションは完成しています。ミントはまだ開始していないため、現在はプレビュー草稿です。`,
 "share.badge": `ライブ`, "share.btn": `X に投稿`, "share.note": `新しいタブで X の投稿画面が開き、上のキャプションが入力済みになります。`,
@@ -1131,7 +1151,7 @@ apply(lang);
 // Live Status — totalSupply + per-rarity remaining counters from Duckie on BNB Chain, refresh 30s.
 // Per-tier minted = tier total − the contract's own remaining counter (commonsRemaining / raresRemaining /
 // epicsRemaining / legendariesRemaining — the deck-draw decrements them on every mint, and minted token IDs
-// are random draws, so these counters are the exact on-chain source; rarityOf codes: 0 Common, 1 Rare, 2 Epic, 3 Legendary).
+// are random draws, so these counters are the exact on-chain source; rarityOf codes: 0 Pondling, 1 Lily, 2 Sunset, 3 Celestial).
 (function(){
   var ADDR = '{{NFT_ADDRESS}}';
   var MAX = 4444;
@@ -1144,8 +1164,8 @@ apply(lang);
   var pctEl = document.getElementById('livePct');
   var fillEl = document.getElementById('liveBarFill');
   var wrapEl = document.getElementById('liveBarWrap');
-  var imgEl = document.getElementById('liveDuckImg');
-  if(!mintedEl || !imgEl) return;
+  var pads = Array.prototype.slice.call(document.querySelectorAll('#pond .pad'));
+  if(!mintedEl) return;
   var leftEls = [], lineEls = [], tierFillEls = [];
   for (var i = 0; i < 4; i++){
     leftEls.push(document.getElementById('ltLeft' + i));
@@ -1166,7 +1186,8 @@ apply(lang);
     pctEl.textContent = (Math.round(pct * 10) / 10) + '%';
     fillEl.style.width = pct + '%';
     wrapEl.setAttribute('aria-valuenow', m);
-    imgEl.style.filter = 'grayscale(' + (1 - ratio).toFixed(3) + ') saturate(' + (0.25 + 0.75 * ratio).toFixed(3) + ')';
+    var bloomed = Math.floor(ratio * 10 + 1e-6);
+    pads.forEach(function(p, i){ p.classList.toggle('bloom', i < bloomed); });
     for (var i = 0; i < 4; i++){
       var rem = Math.max(0, Math.min(TIER_TOTALS[i], remaining[i]));
       var tm = TIER_TOTALS[i] - rem;
